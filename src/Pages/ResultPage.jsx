@@ -9,6 +9,15 @@ import { saveAs } from 'file-saver';
 function ResultPage() {
     const [numPages, setNumPages] = useState("");
 
+    // mobile sreen
+  const [screenSize, setScreenSize] = useState(window.innerWidth)
+  window.addEventListener('resize', function () {
+
+      const screenWidth = window.innerWidth;
+
+      setScreenSize(screenWidth)
+  });
+
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const data = params.get('data');
@@ -60,12 +69,12 @@ function ResultPage() {
             </div>
 
             <div className=' row mx-3'>
-                <div className='col-lg-9'>
+                <div className={screenSize>600 ?'col-lg-9':'mb-5 pb-5'}>
                     <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
                         <div className='d-flex flex-wrap'>{numPages && renderPages()}</div>
                     </Document>
                 </div>
-                <div className='col-lg-3 h-100 border rounded '>
+                <div className={screenSize>600 ?'col-lg-3 h-100 border rounded ':'position-fixed bottom-0 start-0 bg-primary'}>
                     <button className='btn my-4 btn-success w-100' onClick={handleDownload}>DownLoad PDF</button>
                 </div>
             </div>

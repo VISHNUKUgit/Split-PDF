@@ -122,7 +122,7 @@ function EditingPage() {
         </div>
 
         <div className=' row mx-3'>
-          <div className='col-lg-9'>
+          <div className={screenSize>600 ?'col-lg-9':'col-lg-9 mb-5 pb-5'}>
             <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
               <div><h2>Title:{title}</h2></div>
               <div><p>Choose the pages you wish to <span className='fw-bolder'>exclude</span> from this PDF to create a new document</p></div>
