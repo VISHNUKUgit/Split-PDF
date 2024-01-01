@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import LandingPage from "./Pages/LandingPage";
+import Home from "./Pages/Home";
+import EditingPage from "./Pages/EditingPage";
+import { useContext, useEffect, useState } from "react";
+import { loginResponse } from "./ContextAPI/ContextShare";
+import ResultPage from "./Pages/ResultPage";
+import ErrorPage from "./Pages/ErrorPage";
 
 function App() {
+  const {isLoggedin, setIsLoggedin} = useContext(loginResponse)
+  const [isAuthorised, setIsAuthorised] = useState(false);
+
+  // useEffect hook to run when the isLoggedin state changes and check if there is a 
+  //current user in the session storage ,If a user is logged in, set the authorization 
+  //status to true
+  useEffect(()=>{
+    if(sessionStorage.getItem("currentUser")){
+      setIsAuthorised(true)
+    }else
+    {
+      setIsAuthorised(false)
+    }
+  },[isLoggedin])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+  <Routes>
+    <Route path="/" element={<LandingPage/>}/>
+    <Route path="/home" element={isAuthorised?<Home/>:<ErrorPage/>}/>
+    <Route path="/edit" element={isAuthorised?<EditingPage/>:<ErrorPage/>}/>
+    <Route path="/result" element={isAuthorised?<ResultPage/>:<ErrorPage/>}/>
+  </Routes>
+    </>
   );
 }
 
