@@ -9,10 +9,15 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import Spinner from 'react-bootstrap/Spinner';
 import { serverURL } from '../ApiService/serverURL';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url,
-).toString();
+// import { pdfjs } from 'react-pdf';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.js';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(pdfWorker, import.meta.url).toString();
+
+// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+//   'pdfjs-dist/build/pdf.worker.min.js',
+//   import.meta.url,
+// ).toString();
 
 function EditingPage() {
 
