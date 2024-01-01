@@ -4,6 +4,7 @@ import Navbar from '../Cmponents/Navbar';
 import { Document, Page } from 'react-pdf';
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import { serverURL } from '../ApiService/serverURL';
+import { saveAs } from 'file-saver';
 
 function ResultPage() {
     const [numPages, setNumPages] = useState("");
@@ -30,6 +31,20 @@ function ResultPage() {
         return pages;
     };
 
+    const handleDownload = async () => {
+        try {
+            // Fetch the PDF file as a blob
+            const response = await fetch(fileUrl);
+            const blob = await response.blob();
+
+            // using FileSaver.js to save the blob as a file
+            saveAs(blob,data);
+        } catch (error) {
+            console.error('Error downloading the file:', error);
+            
+        }
+    };
+
     return (
         <div>
             <Navbar />
@@ -51,7 +66,7 @@ function ResultPage() {
                     </Document>
                 </div>
                 <div className='col-lg-3 h-100 border rounded '>
-                    <button className='btn my-4 btn-success w-100'>DownLoad PDF</button>
+                    <button className='btn my-4 btn-success w-100' onClick={handleDownload}>DownLoad PDF</button>
                 </div>
             </div>
         </div>
