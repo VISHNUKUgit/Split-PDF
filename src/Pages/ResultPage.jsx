@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../Cmponents/Navbar';
 import { Document, Page } from 'react-pdf';
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import { serverURL } from '../ApiService/serverURL';
 
 function ResultPage() {
     const [numPages, setNumPages] = useState("");
@@ -10,7 +11,7 @@ function ResultPage() {
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const data = params.get('data');
-    const fileUrl = `http://localhost:4000/modified_files/${data}`;
+    const fileUrl = `${serverURL}/modified_files/${data}`;
 
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);

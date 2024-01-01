@@ -7,6 +7,7 @@ import { pdfjs } from 'react-pdf';
 import { createNewPDF } from '../ApiService/allAPI';
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import Spinner from 'react-bootstrap/Spinner';
+import { serverURL } from '../ApiService/serverURL';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
@@ -20,6 +21,15 @@ function EditingPage() {
   const [isClicked, setIsClicked] = useState(false)
   const navigate = useNavigate()
 
+  // mobile sreen
+  const [screenSize, setScreenSize] = useState(window.innerWidth)
+  window.addEventListener('resize', function () {
+
+      const screenWidth = window.innerWidth;
+
+      setScreenSize(screenWidth)
+  });
+
   const { search } = useLocation();
   const params = new URLSearchParams(search);
   const fileId = params.get('fileId');
@@ -28,7 +38,7 @@ function EditingPage() {
   const title = params.get('title');
 
 
-  const fileUrl = `http://localhost:4000/files/${fileName}`;
+  const fileUrl = `${serverURL}/files/${fileName}`;
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
@@ -57,7 +67,7 @@ function EditingPage() {
         <div key={i} className='position-relative bg-dark p-2 m-3'>
           <input type='checkBox' checked={isSelected}
             onChange={() => togglePageSelection(i)} className='position-absolute z-1' style={{ right: '10px', top: '9px' }} value={i} />
-          <Page height={272} pageNumber={i} renderTextLayer={false} renderAnnotationLayer={false} />
+          <Page height={screenSize >600? 272:234} pageNumber={i} renderTextLayer={false} renderAnnotationLayer={false} />
           <h4 className='text-light text-center'>Page {i}</h4>
         </div>
       );
@@ -79,7 +89,7 @@ function EditingPage() {
       const result = await createNewPDF(details);
 
       if (result.status === 200) {
-        console.log(result.data)
+        // console.log(result.data)
         navigate(`/result?data=${result.data.fileName}`);
         setIsClicked(false)
 
@@ -110,12 +120,12 @@ function EditingPage() {
           <div className='col-lg-9'>
             <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
               <div><h2>Title:{title}</h2></div>
-              <div><p>Choose the pages you wish to exclude from this PDF to create a new document</p></div>
+              <div><p>Choose the pages you wish to <span className='fw-bolder'>exclude</span> from this PDF to create a new document</p></div>
               <div className='d-flex flex-wrap'>{numPages && renderPages()}</div>
             </Document>
           </div>
-          <div className='col-lg-3 h-100 border rounded'>
-            <label htmlFor="selectedPage"> selectedPage:</label>
+          <div className={screenSize>600 ?'col-lg-3 h-100 border rounded':'position-fixed bottom-0 start-0 bg-primary z-2'}>
+            <label className='text-black' htmlFor="selectedPage"> selectedPage:</label>
             <input className='form-control' id='selectedPage' type="text" value={selectedPage || ""} />
             <br />
             {!isClicked ?
