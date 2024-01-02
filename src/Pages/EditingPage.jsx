@@ -72,7 +72,7 @@ function EditingPage() {
         <div key={i} className='position-relative bg-dark p-2 m-3'>
           <input type='checkBox' checked={isSelected}
             onChange={() => togglePageSelection(i)} className='position-absolute z-1' style={{ right: '10px', top: '9px' }} value={i} />
-          <Page height={screenSize >600? 272:234} pageNumber={i} renderTextLayer={false} renderAnnotationLayer={false} />
+          <Page height={screenSize >600? 272:300} pageNumber={i} renderTextLayer={false} renderAnnotationLayer={false} />
           <h4 className='text-light text-center'>Page {i}</h4>
         </div>
       );
@@ -125,13 +125,13 @@ function EditingPage() {
           <div className={screenSize>600 ?'col-lg-9':'col-lg-9 mb-5 pb-5'}>
             <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
               <div><h2>Title:{title}</h2></div>
-              <div><p>Choose the pages you wish to <span className='fw-bolder'>exclude</span> from this PDF to create a new document</p></div>
+              <div><p>Check the box to select the pages you wish to <span className='fw-bolder'>exclude</span> from this PDF to create a new document</p></div>
               <div className='d-flex flex-wrap'>{numPages && renderPages()}</div>
             </Document>
           </div>
           <div className={screenSize>600 ?'col-lg-3 h-100 border rounded':'position-fixed bottom-0 start-0 bg-primary z-2'}>
             <label className='text-black' htmlFor="selectedPage"> selectedPage:</label>
-            <input className='form-control' id='selectedPage' type="text" value={selectedPage || ""} />
+            <input className='form-control' id='selectedPage' disabled type="text" value={selectedPage || ""}  />
             <br />
             {!isClicked ?
               <button className='btn mb-4 btn-success w-100' onClick={generatePDF}>Generate new PDF</button> :

@@ -6,15 +6,15 @@ import ListGroup from 'react-bootstrap/ListGroup';
 
 function AllPdf() {
   const navigate = useNavigate()
-  const { uploadStatus, setUploadStatus } = useContext(uploadResponse)
+  const { uploadStatus} = useContext(uploadResponse)
   const [allData, setAllData] = useState("");
 
   const getUserFiles = async () => {
     const userData = sessionStorage.getItem("currentUser");
     const userId = JSON.parse(userData)._id
     try {
-      // console.log(userId);
-      const result = await getUserPDF(userId); // Use userId.uploderId
+      
+      const result = await getUserPDF(userId);
       setAllData(result.data);
 
     } catch (error) {
@@ -25,31 +25,30 @@ function AllPdf() {
   useEffect(() => {
     getUserFiles();
   }, [uploadStatus]);
-  // console.log(allData);
-  // handle nav
+  
   const handlenav = (file) => {
-
     navigate(`/edit?fileId=${file._id}&uploderId=${file.uploderId}&fileName=${file.files}&title=${file.title}`);
-
-
   }
 
   return (
-    <div className=''>
+    <div>
+
       <h1 className='text-center'>All PDF</h1>
 
       <div className='border'>
-        {Array.isArray(allData) & allData.length > 0 ? (
-          // Display files here using the data in 'allData'
+        {allData && allData.length > 0 ? 
+        (
           <ListGroup>
-            {allData.map((file, index) => (
+            {allData.map((file) => (
 
-              <ListGroup.Item key={index} onClick={() => handlenav(file)} action variant="info">
+              <ListGroup.Item key={file._id} onClick={() => handlenav(file)} action variant="info">
                 {file.title}
               </ListGroup.Item>
             ))}
           </ListGroup>
-        ) : (
+        ) 
+        : 
+        (
           <h3 className='text-center'>No Files to show. Please upload some....</h3>
         )}
       </div>

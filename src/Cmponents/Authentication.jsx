@@ -106,6 +106,7 @@ function Authentication() {
             {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
+                    setIsLoading(true)
                     alert("Invalid email");
                 } 
                 else 
