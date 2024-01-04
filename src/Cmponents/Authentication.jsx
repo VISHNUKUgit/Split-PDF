@@ -1,24 +1,33 @@
-import React, { useContext, useEffect } from 'react'
+// Import necessary React components and libraries
+import React, { useContext } from 'react'
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Swal from 'sweetalert2'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { logInUser, registerUser } from '../ApiService/allAPI';
 import { loginResponse } from '../ContextAPI/ContextShare';
 import Spinner from 'react-bootstrap/Spinner';
 
+// Authentication component
 function Authentication() {
+    // Initialize navigation hook
     const navigate = useNavigate()
 
+    // State for loading indicator
     const[isLoading,setIsLoading] = useState(true)
-    const { isLoggedin, setIsLoggedin } = useContext(loginResponse)
+
+    // Context for login state
+    const { setIsLoggedin } = useContext(loginResponse)
     const [isForSignUp, setIsForSignUp] = useState(true)
+
+    // State for authentication form data
     const [authData, setAuthData] = useState({
         username: "",
         email: "",
         password: ""
     })
-    
+
+    // Function to switch to registration form
     const registerForm = () => {
         setAuthData({
             username: "",
@@ -28,6 +37,7 @@ function Authentication() {
         setIsForSignUp(false);
     }
 
+    // Function to switch to login form
     const signUpForm = () => {
         setAuthData({
             username: "",
@@ -37,23 +47,29 @@ function Authentication() {
         setIsForSignUp(true);
     }
 
+    // Function to handle authentication (registration or login)
     const handleAuth = async (e) => {
         e.preventDefault()
 
-        setIsLoading(false)
+        setIsLoading(false)// Start loading indicator
         
         const { username, email, password } = authData
 
+        // Registration logic
         if (isForSignUp) {
 
+            
+            // Check if any of the required fields are empty
             if (!username || !email || !password) {
                 setIsLoading(true)
                 alert("Please fill in all fields");
             } 
             else 
             {
+                // Regular expression to validate email format
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+                // Check if email is in a valid format
                 if (!emailRegex.test(email)) {
                     setIsLoading(true)
                     alert("Invalid email");
@@ -61,11 +77,15 @@ function Authentication() {
                 else 
                 {
                     try 
-                    {
+                    {   
+                        // Attempt to register the user using the provided data
                         const result = await registerUser(authData);
 
                         if (result.status === 200) {
-                            setIsLoading(true)
+                            // Registration successful
+                            
+
+                            // Display success message using SweetAlert2
                             Swal.fire({
                                 title: `Registraion Success`,
                                 html: `Please Sign in`,
@@ -83,28 +103,39 @@ function Authentication() {
                             });
                         }
                         else 
-                        {
-                            setIsLoading(true)
+                        {   
+                            // Registration failed, display error message
+                            
                             alert(result.response.data);
                         }
                     } 
                     catch (error) 
                     {
-                        setIsLoading(true)
+                        // Handle unexpected errors during registration
+                        
                         alert(error)
                     }
+                    finally {
+                        // Set loading to true after upload completion
+                        setIsLoading(true);
+                      }
                 }
             }
         } 
-        else 
-        {
+        else
+        // Login logic
+        {   
+            // Check if any of the required fields are empty
             if (!email || !password) {
                 setIsLoading(true)
                 alert("Please fill in all fields");
             } 
             else 
             {
+                // Regular expression to validate email format
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                // Check if email is in a valid format
                 if (!emailRegex.test(email)) {
                     setIsLoading(true)
                     alert("Invalid email");
@@ -112,16 +143,26 @@ function Authentication() {
                 else 
                 {
                     try {
+                        // Attempt to login the user using the provided data
                         const result = await logInUser(authData);
                         if (result.status === 200) {
-                            setIsLoading(true)
+                            // login successful
+                            
+
+                            // Store user data in sessionStorage
                             sessionStorage.setItem("currentUser", JSON.stringify(result.data));
+
+                            // Set login state to true
                             setIsLoggedin(true)
+
+                            // Reset form data
                             setAuthData({
                                 username: "",
                                 email: "",
                                 password: ""
                             });
+
+                            // Display success message using SweetAlert2
                             Swal.fire({
                                 title: "Authentication success",
                                 html: "Welcome",
@@ -129,22 +170,28 @@ function Authentication() {
                                 allowOutsideClick: false
                             }).then((result) => {
                                 if (result.isConfirmed) {
-
+                                    // If user confirms the success message, navigate to the home page
                                     navigate('/home')
                                 }
                             });
                         }
                         else 
                         {
-                            setIsLoading(true)
+                            // Login failed, display error message
+                            
                             alert(result.response.data)  
                         }
                     } 
                     catch (error) 
                     {
-                        setIsLoading(true)
+                        // Handle unexpected errors during login
+                        
                         console.log(error);   
                     }
+                    finally {
+                        // Set loading to true after upload completion
+                        setIsLoading(true);
+                      }
                 }
             }
         }
@@ -153,7 +200,7 @@ function Authentication() {
 
         <div className='w-75 d-flex flex-column'>
 
-            <h1 className='text-center fw-bolder mb-5'>P<span className='text-danger'>D</span>F <span className='text-warning'>S</span>pliter</h1>
+            <h1 className='text-center fw-bolder mb-5'>P<span className='text-danger'>D</span>F <span className='text-warning'>S</span>li<span className='text-info'>c</span>e.</h1>
             <div className="d-flex flex-column">
 
                 <h2 className=' text-center'>{isForSignUp ? "Sign Up" : "Sign In"}</h2>
@@ -181,22 +228,19 @@ function Authentication() {
                     </button>
                     }
                 </form>
-
-
+            
             </div>
             {
             isForSignUp ?
-                <div className='mt-2'>
+            <div className='mt-2'>
                     <p>Already have an account? Click here to{" "} <span className='text-primary' style={{ cursor: "pointer" }} onClick={registerForm}>Sign in</span>  </p>
-                </div> 
-                : 
-                <div className='mt-2'>
+            </div> 
+            : 
+            <div className='mt-2'>
                     <p>New user? Click here to {" "}<span className='text-primary' style={{ cursor: "pointer" }} onClick={signUpForm}>Register</span>  </p>
-                </div>
+            </div>
             }
         </div>
-
     )
 }
-
 export default Authentication

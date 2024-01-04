@@ -12,8 +12,7 @@ export const commonAPI = async (reqType, url, reqBody, reqHeader) => {
     const response = await axios(reqConfig)
     return response; 
   } catch (error) {
-    // console.error('API request failed:', error);
-    // throw error; 
+    
     return error;
   }
 };

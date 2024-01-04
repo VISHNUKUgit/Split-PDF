@@ -3,25 +3,35 @@ import { Link, useNavigate } from 'react-router-dom'
 import { loginResponse } from '../ContextAPI/ContextShare'
 
 function Navbar() {
+  // Access the login state context
   const { isLoggedin, setIsLoggedin } = useContext(loginResponse)
+
+  // State to track user authorization status
   const [isAuthorised, setIsAuthorised] = useState(false);
   const navigate = useNavigate()
 
+  // useEffect hook to update user authorization status when isLoggedin changes
   useEffect(() => {
     setIsAuthorised(!!sessionStorage.getItem("currentUser"));
   }, [isLoggedin]);
   
-
+// Function to handle user logout
   const handleLogout = () => {
+
+    // Remove user data from sessionStorage
     sessionStorage.removeItem("currentUser");
+
+     // Update login state to false
     setIsLoggedin(false)
+
+    // Navigate to the home page
     navigate('/')
   }
   return (
     <nav className=" navbar navbar-dark bg-primary  fixed-top">
       <div className="container-fluid">
 
-        <span className="navbar-brand ps-5" onClick={() => navigate(!isAuthorised ? '/' : '/home')} style={{ cursor: 'pointer' }}><h3>PDFSlice.com</h3></span>
+        <span className="navbar-brand ps-5" onClick={() => navigate(!isAuthorised ? '/' : '/home')} style={{ cursor: 'pointer' }}><h3>P<span className='text-danger'>D</span>F <span className='text-warning'>S</span>li<span className='text-info'>c</span>e.com</h3></span>
 
         <button className="navbar-toggler " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -51,7 +61,7 @@ function Navbar() {
           </div>
 
         </div>
-
+        
       </div>
     </nav>
   )

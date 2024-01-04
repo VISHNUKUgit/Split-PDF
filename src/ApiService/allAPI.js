@@ -25,3 +25,8 @@ export const createNewPDF =async (details)=>{
    
    return await commonAPI("POST",`${serverURL}/create-new-pdf`,details,"")
 } 
+// downLoad Rearranged PDF
+export const downLoadRearrangePDF =async (details)=>{
+   
+   return await commonAPI("POST",`${serverURL}/rearrange-download-pdf`,details,"")
+} 

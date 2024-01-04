@@ -6,7 +6,7 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb'
 
 function Home() {
   return (
-    <div>
+    <>
       <Navbar />
       <div className='mt-5 pt-5 ms-3 ps-5'>
         <Breadcrumb>
@@ -20,13 +20,10 @@ function Home() {
           </div>
           <div className='col-lg-4'>
             <AllPdf />
-
           </div>
         </div>
-
-
       </div>
-    </div>
+    </>
   )
 }
 

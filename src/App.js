@@ -8,12 +8,16 @@ import ResultPage from "./Pages/ResultPage";
 import ErrorPage from "./Pages/ErrorPage";
 
 function App() {
+  // Context for login state
   const {isLoggedin, setIsLoggedin} = useContext(loginResponse)
+
+  // State to manage user authorization status
   const [isAuthorised, setIsAuthorised] = useState(false);
 
   // useEffect hook to run when the isLoggedin state changes and check if there is a 
   //current user in the session storage ,If a user is logged in, set the authorization 
   //status to true
+
   useEffect(()=>{
     if(sessionStorage.getItem("currentUser")){
       setIsAuthorised(true)
